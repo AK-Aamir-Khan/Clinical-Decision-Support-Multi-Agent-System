@@ -23,3 +23,6 @@ dist/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Personal lab report (not for the public repo)
+docs/MedAgent-CDSS_Lab-I_Report*

@@ -1,183 +1,197 @@
-# MedAgent-CDSS
+# 🩺 MedAgent-CDSS
 
 **A Multi-Agent Clinical Decision Support System for Educational Simulation**
 
-> ⚠️ **Educational simulation only.** This system does not provide medical diagnosis, treatment, or professional medical advice. All patient data in this repository is **synthetic**. It is not a medical device and must not be used for any clinical decision.
+![Python](https://img.shields.io/badge/Python-3.10-3776AB?logo=python&logoColor=white)
+![LangGraph](https://img.shields.io/badge/LangGraph-1.2-1C3C3C)
+![LangChain](https://img.shields.io/badge/LangChain-core%20%2B%20openai-1C3C3C)
+![LLM](https://img.shields.io/badge/LLM-Gemma%203%204B%20via%20Ollama-000000?logo=ollama&logoColor=white)
+![Streamlit](https://img.shields.io/badge/UI-Streamlit-FF4B4B?logo=streamlit&logoColor=white)
+![Tests](https://img.shields.io/badge/tests-101%20passing-brightgreen)
+![License](https://img.shields.io/badge/License-MIT-yellow)
 
-M.Tech Computer Engineering - Agentic AI (Lab-I) project · Domain: Healthcare and Life Sciences
+> [!WARNING]
+> **Educational simulation only.** This system does not provide medical diagnosis, treatment, or professional medical advice. All patient data in this repository is **synthetic**. It is not a medical device and must not be used for any clinical decision.
 
-![Streamlit dashboard](screenshots/dashboard.png)
+MedAgent-CDSS is a **LangGraph** multi-agent system. Specialised agents analyse a synthetic patient case (symptoms, medical history and lab results), retrieve educational knowledge (**RAG**), list conditions a student could *consider*, and suggest diagnostic steps that *could be considered*. Everything passes through **deterministic guardrails** and a **safety review** before the report is produced. Reasoning runs on a **local LLM (Gemma 3 4B via Ollama)** or the OpenAI API. With neither configured, a transparent rule-based mode keeps the whole system runnable offline.
+
+*M.Tech Computer Engineering · CE509 Agentic AI (Computer DLOC Lab-I) · Domain: Healthcare and Life Sciences*
+
+![MedAgent-CDSS dashboard](screenshots/dashboard.png)
 
 ---
 
-## 1. Project overview
+## Contents
 
-MedAgent-CDSS is a multi-agent system, orchestrated with **LangGraph**, in which specialised agents analyse a **synthetic** patient case - symptoms, medical history and laboratory results - retrieve relevant **educational** knowledge (RAG), list conditions a student could *consider*, suggest diagnostic steps that *could be considered*, and pass everything through a **safety review** before producing an educational report.
+- [Highlights](#highlights)
+- [Quick start](#quick-start)
+- [How it works](#how-it-works)
+- [Agents](#agents)
+- [Running with Gemma 3 4B (Ollama)](#running-with-gemma-3-4b-ollama)
+- [Screenshots](#screenshots)
+- [Example input and output](#example-input-and-output)
+- [Testing and evaluation](#testing-and-evaluation)
+- [Project structure](#project-structure)
+- [Configuration](#configuration)
+- [Docker](#docker)
+- [Safety and limitations](#safety-and-limitations)
+- [Future work](#future-work)
+- [Documentation](#documentation)
+- [Author](#author) · [License](#license)
 
-The reasoning agents can use an LLM - the OpenAI API or a **local model such as Gemma 3 4B via Ollama** - through LangChain, with **Pydantic-structured outputs**. Without an LLM configured - or if the API fails or returns malformed output - they fall back to transparent **rule-based** logic, so the whole system can be run, tested and demonstrated offline.
+---
 
-## 2. Problem statement
+## Highlights
 
-*Clinical decision support multi-agent system:* agents analyse patient symptoms, medical history and lab reports, suggest differential diagnoses, and recommend next diagnostic steps.
+- **Real multi-agent orchestration:** LangGraph `StateGraph` with a shared typed state, a **parallel fan-out/fan-in** of three analysis agents, **conditional routing** and a **safety feedback loop**.
+- **Local LLM, no API key:** Gemma 3 4B through Ollama's OpenAI-compatible API. JSON mode with **Pydantic-validated** structured outputs.
+- **Grounded reasoning:** a reproducible TF-IDF + lab-signal retriever over a 13-document educational knowledge base. No vector DB, no extra dependency.
+- **Guardrails in code, not just in prompts:**
+  - **Grounding check:** an LLM candidate must cite retrieved knowledge that matches a reported symptom or abnormal lab.
+  - **Known-history cap:** conditions already in the patient's history are capped at "lower".
+  - **Red-flag priority:** the condition that best explains warning symptoms is listed first.
+- **Deterministic Safety Review Agent:** detects certainty claims, treatment advice, unsafe or "necessity" wording and missing disclaimers. It assigns a risk level, flags cases for human review, sends feedback for one revision, then redacts.
+- **Robust by design:** invalid input stops cleanly. LLM timeouts, connection errors or malformed JSON fall back to rule-based reasoning, and the report says so. Secrets are redacted from errors.
+- **Tested against real model behaviour:** 101 tests, including **recorded Gemma 3 4B replies** replayed as regression fixtures. No test needs the internet or a running model.
 
-## 3. Objective
+---
 
-- Decompose clinical case analysis into cooperating agents with clear, single responsibilities.
-- Demonstrate agent-to-agent communication through a shared, typed state in LangGraph (parallel fan-out/fan-in, conditional routing and a feedback loop).
-- Ground reasoning in a local, reproducible RAG knowledge base.
-- Enforce safety: no certainty claims, no treatment advice, mandatory disclaimer, human-review flagging.
-- Provide a testable, evaluable, GitHub-ready implementation.
+## Quick start
 
-## 4. Features
+**Prerequisites:** Python 3.10+, and optionally [Ollama](https://ollama.com) for LLM mode.
 
-- 8 cooperating components (7 agents + RAG layer) plus a report generator, orchestrated by LangGraph
-- Parallel execution of the Symptom, History and Laboratory agents
-- Input validation that stops the workflow cleanly on invalid/missing data
-- Reference-range lab comparison (sex-specific where applicable), invalid-value handling
-- Local TF-IDF + lab-signal retriever over a 13-document educational knowledge base (no vector DB, no extra dependency)
-- Optional LLM reasoning (OpenAI API or local Ollama model) with structured (Pydantic) outputs and automatic rule-based fallback
-- Deterministic **guardrails** on every differential (grounding check, known-history cap, red-flag priority)
-- Deterministic Safety Review Agent with a **feedback loop** to the Diagnosis and Planning agents and redaction of unsafe text
-- Streamlit UI showing every agent's output and an agent-communication trace
-- 101 automated tests (no API calls - the LLM is mocked or served by a fake local server), evaluation script + notebook, Docker support
+```bash
+git clone https://github.com/AK-Aamir-Khan/Clinical-Decision-Support-Multi-Agent-System.git
+cd Clinical-Decision-Support-Multi-Agent-System
 
-## 5. Multi-agent architecture
+python -m venv .venv
+# Windows:      .venv\Scripts\activate
+# Linux/macOS:  source .venv/bin/activate
+pip install -r requirements.txt
+
+# Optional, LLM mode with a local model:
+ollama pull gemma3:4b
+copy .env.example .env        # Linux/macOS: cp .env.example .env
+# then in .env set:
+#   OPENAI_BASE_URL=http://localhost:11434/v1
+#   OPENAI_MODEL=gemma3:4b
+
+streamlit run app/main.py     # opens http://localhost:8501
+```
+
+Without `.env`, the app runs in **rule-based mode**: every agent still works and no model is needed.
+
+| Command | What it does |
+|---|---|
+| `streamlit run app/main.py` | Web UI: pick a synthetic case, run the agents, inspect every output |
+| `python -m pytest` | Run the 101 tests (no API calls) |
+| `python -m app.evaluation` | Metrics on all synthetic cases → `evaluation/results.md` |
+| `python -m app.evaluation --llm` | Also evaluate LLM mode (needs Ollama or an API key) |
+| `python scripts/generate_docs.py` | Regenerate diagrams and sample output in `docs/` |
+
+---
+
+## How it works
+
+```mermaid
+flowchart TD
+    IN([Synthetic patient case]) --> PD[Patient Data Agent<br/>validate + structure]
+    PD -- invalid --> RG[Report Generator]
+    PD -- valid --> SA[Symptom Analysis Agent]
+    PD -- valid --> MH[Medical History Agent]
+    PD -- valid --> LA[Laboratory Analysis Agent]
+    SA --> RAG[RAG Retriever<br/>TF-IDF + lab signals]
+    MH --> RAG
+    LA --> RAG
+    RAG --> DD[Differential Diagnosis Agent<br/>LLM + guardrails]
+    DD --> DP[Diagnostic Planning Agent<br/>LLM]
+    DP --> SR{Safety Review Agent<br/>deterministic rules}
+    SR -- "violations in LLM text (max 1 revision)" --> DD
+    SR -- finalize / redact --> RG
+    RG --> OUT([Educational report + disclaimer])
+```
+
+1. The **Patient Data Agent** validates the input with Pydantic. Invalid input goes straight to the report.
+2. The **Symptom, History and Laboratory** agents run **in parallel**.
+3. The **RAG Retriever** waits for all three (fan-in). It builds a query from symptoms, conditions and out-of-range labs, and retrieves educational documents.
+4. The **Differential Diagnosis Agent** reasons over the analyses and the retrieved context. **Guardrails** then check and correct the result.
+5. The **Diagnostic Planning Agent** proposes diagnostic steps. Red-flag cases always start with "prompt clinician review".
+6. The **Safety Review Agent** checks the text. If LLM output breaks a rule, it sends **feedback** to the Diagnosis and Planning agents for one revision. Any remaining violations are redacted.
+7. The **Report Generator** assembles the final educational report.
+
+Agents never call each other directly. They communicate only through the shared `ClinicalState`, and every step is logged in an **agent-communication trace** shown in the UI.
+
+<details>
+<summary>Architecture diagram</summary>
 
 ![Architecture](docs/architecture.png)
 
-## 6. Agent responsibilities
+</details>
 
-| Agent | File | Reads (from state) | Writes (to state) | Responsibility |
+---
+
+## Agents
+
+| Agent | File | Reads | Writes | Type |
 |---|---|---|---|---|
-| Patient Data Agent | `app/agents/patient_agent.py` | `patient_input` | `patient`, `validation` | Validate with Pydantic, report missing/invalid fields, structure the case |
-| Symptom Analysis Agent | `app/agents/symptom_agent.py` | `patient` | `symptom_analysis` | Key features, duration category, body systems, warning (red-flag) symptoms. No diagnosis |
-| Medical History Agent | `app/agents/history_agent.py` | `patient` | `history_analysis` | Classify conditions, medication classes (context only), allergies, risk factors |
-| Laboratory Analysis Agent | `app/agents/lab_agent.py` | `patient` | `lab_analysis` | Compare values with `data/lab_reference_ranges.json`: low / normal / high / invalid / unknown |
-| RAG Retriever | `app/rag/` | the 3 analyses | `retrieval_query`, `retrieved_knowledge` | Build a query, retrieve top-k educational documents |
-| Differential Diagnosis Agent | `app/agents/diagnosis_agent.py` | analyses, knowledge, `safety_feedback` | `differential_diagnosis` | Up to 5 conditions to *consider* with supporting and missing/conflicting evidence |
-| Diagnostic Planning Agent | `app/agents/diagnostic_planning_agent.py` | analyses, differential | `diagnostic_plan` | Diagnostic steps that could be considered, each with a rationale. No treatment |
-| Safety Review Agent | `app/agents/safety_agent.py` | differential, plan, red flags | `safety_review`, `safety_feedback` | Detect certainty / treatment / unsafe language / missing disclaimer; risk level; revise or redact |
-| Report Generator | `app/agents/report_agent.py` | whole state | `final_report` | Educational report (JSON + Markdown) with disclaimer |
+| Patient Data Agent | `app/agents/patient_agent.py` | `patient_input` | `patient`, `validation` | Rules |
+| Symptom Analysis Agent | `app/agents/symptom_agent.py` | `patient` | `symptom_analysis` | Rules |
+| Medical History Agent | `app/agents/history_agent.py` | `patient` | `history_analysis` | Rules |
+| Laboratory Analysis Agent | `app/agents/lab_agent.py` | `patient` | `lab_analysis` | Rules |
+| RAG Retriever | `app/rag/` | the three analyses | `retrieved_knowledge` | Rules |
+| Differential Diagnosis Agent | `app/agents/diagnosis_agent.py` | analyses, knowledge, `safety_feedback` | `differential_diagnosis` | LLM + guardrails |
+| Diagnostic Planning Agent | `app/agents/diagnostic_planning_agent.py` | analyses, differential, `safety_feedback` | `diagnostic_plan` | LLM + rules |
+| Safety Review Agent | `app/agents/safety_agent.py` | differential, plan, red flags | `safety_review`, `safety_feedback` | Rules |
+| Report Generator | `app/agents/report_agent.py` | whole state | `final_report` | Rules |
 
-## 7. Workflow
+**Design principle:** the LLM is used only where language reasoning adds value. Validation, ranking constraints and safety stay in deterministic, testable code.
 
-![Workflow](docs/workflow.png)
+---
 
-1. **Patient Data Agent** validates the input. Invalid → jump straight to the report (workflow stopped).
-2. Valid → **fan-out**: Symptom, History and Laboratory agents run **in parallel**.
-3. **Fan-in**: the RAG Retriever waits for all three, builds a query (symptoms + conditions + out-of-range labs) and retrieves educational context.
-4. **Differential Diagnosis Agent** reasons over the three analyses plus retrieved context.
-5. **Diagnostic Planning Agent** proposes diagnostic steps for those candidates (red-flag cases always start with "prompt clinician review").
-6. **Safety Review Agent** checks the output. If LLM-generated text violates a rule, it sends **feedback back to the Diagnosis Agent** (max 1 revision, configurable). Remaining violations are redacted.
-7. **Report Generator** produces the final educational report.
+## Running with Gemma 3 4B (Ollama)
 
-The exact graph exported from the compiled LangGraph is in [`docs/workflow_graph.mmd`](docs/workflow_graph.mmd) (Mermaid).
+Gemma 3 in Ollama does not support tool/function calling. When `OPENAI_BASE_URL` points to a local server, the app therefore switches automatically to **JSON mode**. It adds a JSON template generated from the Pydantic schema to the prompt and validates the reply. The default timeout is 180 s, and the sidebar shows `gemma3:4b via local server …`.
 
-## 8. Technologies used
+**Observed behaviour:** these replies were measured by sending the agents' real prompts to `gemma3:4b` (Q4_K_M, temperature 0) on a laptop CPU.
 
-| Technology | Used for |
+| Call | Time | Valid JSON | Observation |
+|---|---|---|---|
+| Diagnosis, SIM-001 | 19.8 s | ✅ | Sensible ranking; passed safety review |
+| Diagnosis, SIM-005 (first prompt) | 15.2 s | ✅ | Ranked known diabetes above chest-pain ACS; ungrounded "Hypertension" and "Dengue" candidates |
+| Diagnosis, SIM-005 (tightened prompt) | 13.4 s | ✅ | ACS first, but **invented a patient location** as evidence for dengue |
+| Planning, SIM-005 | 12.7 s | ✅ | Good steps (ECG, troponin) but "is warranted" / "should be measured" |
+
+**Lesson:** a 4B model handles structure and explanation well, but prompt fixes alone did not stop the invented evidence. The **guardrails** and the **safety agent** catch every issue above. The exact replies are stored in [`tests/data/gemma3_4b_recorded.json`](tests/data/gemma3_4b_recorded.json) and replayed in [`tests/test_guardrails.py`](tests/test_guardrails.py).
+
+A full case takes about 30–40 s with Gemma on a CPU, and about twice that when the safety agent requests a revision.
+
+**Live run in the UI with Gemma 3 4B (SIM-005, red-flag case).** The trace shows LLM reasoning, guardrail adjustments, the Safety Review Agent sending feedback, one revision by the Diagnosis and Planning agents, and final redaction. The report confirms `Reasoning mode: llm (gemma3:4b)`.
+
+| | |
 |---|---|
-| Python 3.10 | Implementation |
-| LangGraph | `StateGraph` orchestration, parallel branches, conditional edges, feedback loop |
-| LangChain (`langchain-core`, `langchain-openai`) | `ChatOpenAI`, `with_structured_output` |
-| OpenAI API or Ollama (optional) | LLM reasoning for the Diagnosis and Planning agents (e.g. `gpt-4o-mini` or local `gemma3:4b`) |
-| Pydantic v2 | Input validation and structured LLM output schemas |
-| Streamlit | Web UI |
-| python-dotenv | Loading `.env` configuration |
-| pytest | Unit, integration and UI (`streamlit.testing`) tests |
-| Docker | Containerised run |
+| ![Gemma 3 4B agent trace](screenshots/gemma_sim005_trace.png) | ![Gemma 3 4B final report](screenshots/gemma_sim005_final_report.png) |
+| **Agent trace:** guardrails, safety feedback loop, revision, redaction | **Final report:** `Reasoning mode: llm (gemma3:4b)`, high risk flagged for human review |
 
-## 9. Project structure
+---
 
-```
-clinical_multi-agent_cdss/
-├── app/
-│   ├── main.py                 # Streamlit UI
-│   ├── config.py               # settings from environment variables
-│   ├── llm.py                  # ChatOpenAI factory + structured-output helper with fallback
-│   ├── prompts.py              # structured prompt templates
-│   ├── evaluation.py           # evaluation framework (python -m app.evaluation)
-│   ├── agents/                 # patient, symptom, history, lab, diagnosis, planning, safety, report
-│   ├── models/schemas.py       # PatientCase + structured output schemas
-│   ├── rag/                    # knowledge_base.py, retriever.py
-│   ├── utils/validators.py     # disclaimer, number checks, secret redaction
-│   └── workflow/               # state.py, nodes.py, graph.py (LangGraph)
-├── data/
-│   ├── synthetic_patients.json # 8 synthetic cases (7 valid + 1 invalid demo)
-│   ├── lab_reference_ranges.json
-│   └── knowledge_base.json     # 13 educational documents
-├── tests/                      # 101 tests, LLM mocked
-├── evaluation/                 # safety test set + generated results
-├── notebooks/evaluation.ipynb
-├── docs/                       # diagrams, Mermaid graph, sample I/O, report notes
-├── screenshots/                # real screenshots of the running app
-├── scripts/generate_docs.py    # regenerates docs/ artefacts from the code
-├── Dockerfile, .dockerignore
-├── requirements.txt, requirements-dev.txt
-├── .env.example, .gitignore, pytest.ini, LICENSE
-└── README.md
-```
+## Screenshots
 
-## 10. Installation
+> Captured from the running app with the latest code, in rule-based mode. For LLM-mode screenshots with Gemma 3 4B, see [Running with Gemma 3 4B](#running-with-gemma-3-4b-ollama).
 
-```bash
-git clone https://github.com/AK-Aamir-Khan/clinical_multi-agent_cdss.git
-cd clinical_multi-agent_cdss
-python -m venv .venv
-# Windows:  .venv\Scripts\activate
-# Linux/macOS: source .venv/bin/activate
-pip install -r requirements.txt
-```
+| | |
+|---|---|
+| ![RAG and differential](screenshots/analysis.png) | ![Red-flag guardrail](screenshots/guardrail_redflag.png) |
+| **RAG context and conditions to consider** (SIM-001) | **Red-flag case:** guardrail note, ACS listed first (SIM-005) |
+| ![Safety review](screenshots/safety_review.png) | ![Agent trace](screenshots/agent_trace.png) |
+| **Clinician review first; high risk, human review** (SIM-005) | **Agent-communication trace** (SIM-001) |
+| ![Final report](screenshots/report.png) | ![Invalid input](screenshots/invalid_input.png) |
+| **Final educational report** (SIM-001) | **Invalid input stops the workflow** (SIM-008) |
 
-## 11. Environment setup
+---
 
-```bash
-# Windows: copy .env.example .env      Linux/macOS: cp .env.example .env
-```
+## Example input and output
 
-**Never commit `.env`** (it is in `.gitignore`). Choose one option:
-
-**Option A - OpenAI API:** set `OPENAI_API_KEY` (and optionally `OPENAI_MODEL`, default `gpt-4o-mini`).
-
-**Option B - local model with Ollama (free, offline, no API key):**
-
-```bash
-ollama pull gemma3:4b
-ollama list                     # confirm the model is there; Ollama serves on port 11434
-```
-
-Then in `.env` (leave `OPENAI_API_KEY` unset or as the placeholder):
-
-```
-OPENAI_BASE_URL=http://localhost:11434/v1
-OPENAI_MODEL=gemma3:4b
-```
-
-Ollama exposes an OpenAI-compatible API, so the same `ChatOpenAI` client is used - no extra dependency. Gemma 3 in Ollama does not support tool/function calling, so for a local server the app automatically uses **JSON mode** (`LLM_STRUCTURED_METHOD=json_mode`) and adds a JSON template to the prompt; the reply is still validated with Pydantic. The timeout defaults to 180 s because a 4B model on a laptop CPU can take a minute or more per agent. If the small model returns invalid JSON or the server is not running, the agent falls back to rule-based reasoning and the report says so (e.g. `Reasoning mode: rule-based fallback (gemma3:4b unavailable)`).
-
-**Neither:** the app runs in **rule-based mode**.
-
-Other settings: `LLM_TEMPERATURE`, `LLM_TIMEOUT_SECONDS`, `LLM_MAX_RETRIES`, `LLM_STRUCTURED_METHOD`, `USE_LLM`, `RAG_TOP_K`, `MAX_SAFETY_REVISIONS` (see `.env.example`).
-
-## 12. How to run
-
-```bash
-streamlit run app/main.py          # web UI at http://localhost:8501
-python -m pytest                   # test suite
-python -m app.evaluation           # evaluation -> evaluation/results.md
-python -m app.evaluation --llm     # also evaluate LLM mode (needs an API key or Ollama)
-python scripts/generate_docs.py    # regenerate docs/ (PNGs need: pip install -r requirements-dev.txt)
-```
-
-Docker:
-
-```bash
-docker build -t medagent-cdss .
-docker run --rm -p 8501:8501 --env-file .env medagent-cdss   # omit --env-file for rule-based mode
-# with Ollama on the host, use OPENAI_BASE_URL=http://host.docker.internal:11434/v1 inside the container
-```
-
-## 13. Example synthetic input
+**Input** (synthetic case SIM-001):
 
 ```json
 {
@@ -193,15 +207,13 @@ docker run --rm -p 8501:8501 --env-file .env medagent-cdss   # omit --env-file f
 }
 ```
 
-## 14. Example output
+**Output** (rule-based mode; full JSON in [`docs/sample_output.json`](docs/sample_output.json)):
 
-Actual output for SIM-001 in rule-based mode (full JSON in [`docs/sample_output.json`](docs/sample_output.json)):
-
-```
+```text
 Conditions to consider (not a diagnosis)
-- Community-acquired pneumonia (higher consideration): cough; fatigue; fever; WBC high; CRP high
-- Urinary tract infection (moderate consideration): fever; WBC high; CRP high
-- Influenza-like illness (moderate consideration): cough; fatigue; fever
+- Community-acquired pneumonia (higher):   cough; fatigue; fever; WBC high; CRP high
+- Urinary tract infection (moderate):      fever; WBC high; CRP high
+- Influenza-like illness (moderate):       cough; fatigue; fever
 
 Diagnostic steps that could be considered
 - [early]   Chest X-ray is commonly used to look for lung consolidation.
@@ -211,81 +223,130 @@ Diagnostic steps that could be considered
 Safety risk level: low (passed)
 ```
 
-Agent communication trace for the same run:
+**Synthetic demo cases** in [`data/synthetic_patients.json`](data/synthetic_patients.json):
 
-| Agent | Message passed on |
+| Case | Demonstrates |
 |---|---|
-| Patient Data Agent | Patient record valid; structured case shared with analysis agents. |
-| Symptom Analysis Agent | 3 symptom(s), systems: constitutional, respiratory. |
-| Medical History Agent | 1 past condition(s), 1 medication(s) and 0 allergy record(s) reviewed. |
-| Laboratory Analysis Agent | 2 lab value(s) reviewed: 2 outside the reference range, 0 invalid, 0 without a reference range. |
-| RAG Retriever | Retrieved 4 document(s): KB-001, KB-012, KB-005, KB-003 |
-| Differential Diagnosis Agent | 3 candidate(s) via rule-based reasoning. |
-| Diagnostic Planning Agent | 6 diagnostic step(s) via rule-based reasoning. |
-| Safety Review Agent | Risk low; passed. |
-| Report Generator | Report status: completed. |
+| SIM-001 | Respiratory presentation with raised inflammatory markers |
+| SIM-002 | Fatigue and pallor with low hemoglobin indices |
+| SIM-003 | Thirst and frequent urination with raised glucose |
+| SIM-004 | Acute fever with rash and low platelets |
+| SIM-005 | Chest pain with risk factors: **red flags, high risk, guardrails** |
+| SIM-006 | Tiredness and cold intolerance with raised TSH |
+| SIM-007 | One **invalid lab value**: excluded and flagged |
+| SIM-008 | **Invalid record**: workflow stops at validation |
 
-More screenshots: [analysis](screenshots/analysis.png) · [report](screenshots/report.png) · [agent trace](screenshots/agent_trace.png) · [red-flag safety review](screenshots/safety_review.png)
+---
 
-### Observed behaviour with Gemma 3 4B (local, Ollama)
-
-Measured on 2026-09-27 by sending the app's real prompts to `gemma3:4b` (Q4_K_M, temperature 0, JSON mode) on the author's laptop:
-
-| Call | Time | JSON valid | Observation |
-|---|---|---|---|
-| Diagnosis, SIM-001 | 19.8 s | yes | Sensible: pneumonia (higher), influenza-like (moderate), UTI (lower, "no urinary symptoms"). Passed safety. |
-| Diagnosis, SIM-005 (first prompt) | 15.2 s | yes | Ranked known diabetes *higher* and chest-pain ACS only *moderate*; listed Hypertension with no knowledge reference; supported Dengue with "chest pain". |
-| Diagnosis, SIM-005 (tightened prompt) | 13.4 s | yes | ACS first; but still rated known diabetes *moderate* and invented a "location (India)" risk factor for Dengue. |
-| Planning, SIM-005 | 12.7 s | yes | Good steps (ECG, troponin, ...), but "is warranted", "should be measured", "strongly support the diagnosis", and put the clinician-review label on the ECG step. |
-
-These observations drove the deterministic guardrails in `DifferentialDiagnosisAgent.apply_guardrails` (grounding check, known-history cap, red-flag priority), the extra "necessity" safety rules and the stricter red-flag step in the planning agent. The exact replies are stored in `tests/data/gemma3_4b_recorded.json` and replayed in `tests/test_guardrails.py`, so the suite checks the system against this model's real behaviour without calling it.
-
-## 15. Testing
+## Testing and evaluation
 
 ```bash
-python -m pytest
+python -m pytest            # 101 passed
+python -m app.evaluation    # writes evaluation/results.md
 ```
 
-101 tests cover: `PatientCase` validation, every agent, RAG retrieval, diagnosis/planning output structure, safety detection and redaction, the full LangGraph workflow on every synthetic case, the safety feedback loop, LLM API failure and malformed-output fallback, the local-model path (a fake OpenAI-compatible server on localhost checks the real client, JSON mode and parsing), secret redaction in errors, and headless Streamlit UI tests. **No test calls the OpenAI API or needs Ollama** - LLM behaviour is simulated with a fake model (`tests/fakes.py`) or a fake local server (`tests/test_local_llm_server.py`).
+The tests cover every agent, RAG retrieval, output structure and safety rules. They also run the full workflow on every case and exercise the feedback loop, LLM failure and malformed-output fallback, and the local-server path (a fake OpenAI-compatible server on localhost). Finally, they replay the recorded Gemma replies and run headless Streamlit UI tests.
 
-### Evaluation
+| Metric (rule-based mode) | Result |
+|---|---|
+| Input validation accuracy | 100% (15/15) |
+| Workflow completion rate | 100% (7/7) |
+| Agent execution success rate | 100% (65/65) |
+| Structured output validity | 100% (14/14) |
+| Disclaimer present in report | 100% (8/8) |
+| Safety violation detection / false positives | 100% (18/18) / 0% (0/12) |
+| Latency per case (mean / max) | 7.4 ms / 11.9 ms |
 
-`python -m app.evaluation` measures input-validation accuracy, workflow completion rate, agent execution success rate, structured-output validity, disclaimer presence, safety-rule detection / false-positive rate (on a small hand-written labelled set) and latency. Results are written to [`evaluation/results.md`](evaluation/results.md).
+> These numbers describe **software behaviour on synthetic data** written alongside the rules. They show that the pipeline works as designed; they are **not** evidence of clinical accuracy.
 
-These numbers describe **software behaviour on synthetic data** that was written alongside the rules, so high scores show the pipeline works as designed - they are **not** evidence of clinical accuracy or generalisation. LLM-mode metrics are only produced when an LLM (API key or Ollama) is configured.
+---
 
-## 16. Safety and ethical limitations
+## Project structure
 
-- Educational simulation only; not validated clinically; not a medical device.
-- Synthetic data only - never enter real patient information.
-- The knowledge base is a short set of general summaries written for this project, not an authoritative clinical source.
+```
+Clinical-Decision-Support-Multi-Agent-System/
+├── app/
+│   ├── main.py                  # Streamlit UI
+│   ├── config.py                # settings from environment variables
+│   ├── llm.py                   # LLM factory, JSON-mode template, structured call with fallback
+│   ├── prompts.py               # structured prompt templates
+│   ├── evaluation.py            # evaluation framework
+│   ├── agents/                  # patient, symptom, history, lab, diagnosis, planning, safety, report
+│   ├── models/schemas.py        # PatientCase + output schemas
+│   ├── rag/                     # knowledge_base.py, retriever.py
+│   ├── utils/validators.py      # disclaimer, number checks, secret redaction
+│   └── workflow/                # state.py, nodes.py, graph.py (LangGraph)
+├── data/                        # synthetic cases, reference ranges, educational knowledge base
+├── tests/                       # 101 tests + recorded Gemma replies (tests/data/)
+├── evaluation/                  # safety test set and results
+├── notebooks/evaluation.ipynb
+├── docs/                        # diagrams, Mermaid graph, sample I/O, report notes
+├── screenshots/                 # screenshots of the running app
+├── scripts/generate_docs.py     # regenerates docs/ from the code
+├── Dockerfile, requirements.txt, requirements-dev.txt
+└── .env.example, pytest.ini, LICENSE
+```
+
+---
+
+## Configuration
+
+All settings come from environment variables (`.env`, see [`.env.example`](.env.example)). **Never commit `.env`**; it is already in `.gitignore`.
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `OPENAI_BASE_URL` | – | Local OpenAI-compatible server, e.g. `http://localhost:11434/v1` for Ollama |
+| `OPENAI_MODEL` | `gpt-4o-mini` | Model name, e.g. `gemma3:4b` |
+| `OPENAI_API_KEY` | – | Only needed for the OpenAI API |
+| `LLM_STRUCTURED_METHOD` | auto | `json_mode` for local servers, `function_calling` for OpenAI |
+| `LLM_TIMEOUT_SECONDS` | 180 local / 30 API | Request timeout |
+| `USE_LLM` | `true` | `false` forces rule-based mode |
+| `RAG_TOP_K` | `4` | Number of knowledge documents retrieved |
+| `MAX_SAFETY_REVISIONS` | `1` | Safety feedback loop limit |
+
+---
+
+## Docker
+
+```bash
+docker build -t medagent-cdss .
+docker run --rm -p 8501:8501 medagent-cdss                    # rule-based mode
+docker run --rm -p 8501:8501 --env-file .env medagent-cdss    # with your settings
+```
+
+To reach Ollama on the host from inside the container, use `OPENAI_BASE_URL=http://host.docker.internal:11434/v1`.
+
+---
+
+## Safety and limitations
+
+- Educational simulation only. It is not clinically validated and not a medical device. **Never enter real patient data.**
+- The knowledge base contains short general summaries written for this project. It is not an authoritative clinical source.
 - Reference ranges are approximate; real ranges vary by laboratory, method and population.
-- Consideration levels are relative labels, not probabilities.
-- The safety agent is rule-based: it can miss paraphrased unsafe text and may over-flag. Outputs flagged as high risk are marked for human review.
-- LLM output can be wrong or inconsistent even after structuring and safety review.
+- Consideration levels ("higher / moderate / lower") are relative labels, not probabilities.
+- The safety agent is rule-based. It can miss paraphrased unsafe text and may over-flag. High-risk cases are marked for human review.
+- Small local models can be wrong or inconsistent even after structuring, guardrails and safety review.
 
-## 17. Future enhancements
+## Future work
 
-- Embedding-based retrieval (e.g. FAISS) once the knowledge base grows beyond keyword-friendly size
-- An LLM-based safety critic *in addition to* the deterministic rules
-- Larger, clinician-reviewed synthetic case set with expected outputs for evaluation
+- Embedding-based retrieval (e.g. FAISS) for a larger knowledge base
+- An LLM-based safety critic **in addition to** the deterministic rules
+- A clinician-reviewed synthetic case set with expected outputs
 - LangGraph checkpointing for human-in-the-loop review of high-risk cases
-- Tracing/observability (e.g. LangSmith) for LLM-mode runs
+- Tracing and observability for LLM-mode runs
 
-## 18. GitHub usage
+## Documentation
 
-```bash
-git init
-git add .
-git status                      # confirm .env and .venv are NOT listed
-git commit -m "MedAgent-CDSS: educational multi-agent CDSS"
-git branch -M main
-git remote add origin https://github.com/AK-Aamir-Khan/clinical_multi-agent_cdss.git
-git push -u origin main
-```
+- [`docs/PROJECT_REPORT.md`](docs/PROJECT_REPORT.md): design notes, communication design and viva Q&A
+- [`docs/workflow_graph.mmd`](docs/workflow_graph.mmd): graph exported from the compiled LangGraph
+- [`evaluation/results.md`](evaluation/results.md): latest evaluation results
+- [`notebooks/evaluation.ipynb`](notebooks/evaluation.ipynb): evaluation notebook
 
-Before pushing, check that no API key appears anywhere: `git grep -n "sk-"` should only show the deliberately fake keys in `tests/test_diagnosis_agent.py` and `tests/test_workflow_state.py` (used to test that secrets are redacted from error messages).
+## Author
 
-## 19. License
+**Aamir Khan**, M.Tech Computer Engineering
+[GitHub](https://github.com/AK-Aamir-Khan) · [LinkedIn](https://www.linkedin.com/in/akhanengineer)
 
-MIT - see [LICENSE](LICENSE). Educational use only.
+## License
+
+[MIT](LICENSE). For educational use only.
