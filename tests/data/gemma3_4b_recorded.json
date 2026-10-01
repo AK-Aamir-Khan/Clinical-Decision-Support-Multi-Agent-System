@@ -1,0 +1,254 @@
+{
+  "_meta": "Real replies recorded from gemma3:4b (Ollama, Q4_K_M, temperature 0, JSON mode) to the app's Differential Diagnosis prompt (SIM-005-tightened-prompt: after the prompt constraints were tightened) on 2026-09-27. Used as regression fixtures; do not edit. PLAN-SIM-005: reply to the Diagnostic Planning prompt for SIM-005.",
+  "SIM-001": {
+    "candidates": [
+      {
+        "condition": "Community-acquired pneumonia",
+        "category": "Respiratory infection",
+        "consideration_level": "higher",
+        "supporting_evidence": [
+          "The patient presents with fever, cough, and fatigue, which are common symptoms of pneumonia.",
+          "The WBC count is elevated, and CRP is elevated, which can be indicative of an inflammatory response, such as that seen in pneumonia."
+        ],
+        "missing_or_conflicting_evidence": [
+          "No specific findings (e.g., sputum production, localized chest sounds) were reported."
+        ],
+        "knowledge_refs": [
+          "KB-001"
+        ]
+      },
+      {
+        "condition": "Influenza-like illness",
+        "category": "Viral infection",
+        "consideration_level": "moderate",
+        "supporting_evidence": [
+          "The patient\u2019s symptoms (fever, cough, fatigue) are consistent with influenza-like illness.",
+          "The duration of symptoms (5 days) is within the range of typical influenza infections."
+        ],
+        "missing_or_conflicting_evidence": [
+          "The absence of specific influenza testing results."
+        ],
+        "knowledge_refs": [
+          "KB-003"
+        ]
+      },
+      {
+        "condition": "Urinary tract infection",
+        "category": "Infection",
+        "consideration_level": "lower",
+        "supporting_evidence": [
+          "Fever can be a presenting symptom of urinary tract infections, particularly if the infection has ascended to the kidneys."
+        ],
+        "missing_or_conflicting_evidence": [
+          "No mention of urinary symptoms (dysuria, frequency, urgency)."
+        ],
+        "knowledge_refs": [
+          "KB-005"
+        ]
+      }
+    ],
+    "reasoning_summary": "Based on the patient\u2019s symptoms of fever, cough, and fatigue, along with elevated WBC and CRP, several conditions are being considered. Community-acquired pneumonia is a primary consideration given the inflammatory markers. Influenza-like illness is also possible, and urinary tract infection should be considered, although the absence of specific urinary symptoms lowers its likelihood. Further investigation is needed to determine the underlying cause.",
+    "disclaimer": "This differential diagnosis is based solely on the provided information and does not constitute medical advice. Additional diagnostic testing and clinical evaluation are necessary for accurate diagnosis and management."
+  },
+  "SIM-005": {
+    "candidates": [
+      {
+        "condition": "Type 2 diabetes mellitus",
+        "category": "Metabolic Disorder",
+        "consideration_level": "higher",
+        "supporting_evidence": [
+          "Elevated fasting glucose (142 mg/dL) is above the normal reference range.",
+          "Patient has a history of type 2 diabetes."
+        ],
+        "missing_or_conflicting_evidence": [
+          "No HbA1c result available to assess long-term glycemic control."
+        ],
+        "knowledge_refs": [
+          "KB-007"
+        ]
+      },
+      {
+        "condition": "Acute coronary syndrome",
+        "category": "Cardiovascular",
+        "consideration_level": "moderate",
+        "supporting_evidence": [
+          "Patient presents with chest pain and shortness of breath, which are typical symptoms of ACS.",
+          "Patient has a history of hypertension and is a smoker, both recognised risk factors for ACS."
+        ],
+        "missing_or_conflicting_evidence": [
+          "No ECG or cardiac biomarkers (e.g., troponin) available to confirm or exclude ACS."
+        ],
+        "knowledge_refs": [
+          "KB-010"
+        ]
+      },
+      {
+        "condition": "Community-acquired pneumonia",
+        "category": "Respiratory Infection",
+        "consideration_level": "lower",
+        "supporting_evidence": [
+          "Patient presents with chest pain, which can be a symptom of pneumonia."
+        ],
+        "missing_or_conflicting_evidence": [
+          "No fever, cough, or abnormal white cell count reported."
+        ],
+        "knowledge_refs": [
+          "KB-001"
+        ]
+      },
+      {
+        "condition": "Dengue fever",
+        "category": "Infectious Disease",
+        "consideration_level": "lower",
+        "supporting_evidence": [
+          "Patient presents with chest pain, which can be associated with dengue fever."
+        ],
+        "missing_or_conflicting_evidence": [
+          "No fever, headache, muscle/joint pain, or rash reported."
+        ],
+        "knowledge_refs": [
+          "KB-004"
+        ]
+      },
+      {
+        "condition": "Hypertension",
+        "category": "Cardiovascular",
+        "consideration_level": "moderate",
+        "supporting_evidence": [
+          "Patient has a history of hypertension."
+        ],
+        "missing_or_conflicting_evidence": [
+          "No current blood pressure reading available."
+        ],
+        "knowledge_refs": []
+      }
+    ],
+    "reasoning_summary": "The patient's symptoms of chest pain and shortness of breath, combined with a history of hypertension, type 2 diabetes, and smoking, raise concern for several conditions. Type 2 diabetes is a primary consideration given the elevated glucose level. Acute coronary syndrome is also a significant consideration due to the presenting symptoms and risk factors. Other possibilities, such as community-acquired pneumonia and dengue fever, are considered at a lower level due to the absence of supporting laboratory findings. Hypertension is a relevant past medical history.",
+    "disclaimer": "This differential diagnosis is based solely on the provided information and educational knowledge. Further investigation and clinical assessment are required to determine the correct diagnosis."
+  },
+  "SIM-005-tightened-prompt": {
+    "candidates": [
+      {
+        "condition": "Acute coronary syndrome",
+        "category": "cardiovascular",
+        "consideration_level": "higher",
+        "supporting_evidence": [
+          "Chest pain, shortness of breath, and sweating are typical features of acute coronary syndrome.",
+          "Hypertension and smoking are recognised risk factors for acute coronary syndrome.",
+          "The presence of chest pain and shortness of breath constitutes a red flag."
+        ],
+        "missing_or_conflicting_evidence": [
+          "No information regarding cardiac enzymes or ECG findings."
+        ],
+        "knowledge_refs": [
+          "KB-001",
+          "KB-007",
+          "KB-010"
+        ]
+      },
+      {
+        "condition": "Type 2 diabetes mellitus",
+        "category": "metabolic/endocrine",
+        "consideration_level": "moderate",
+        "supporting_evidence": [
+          "A fasting glucose of 142 mg/dL is elevated.",
+          "The patient has a history of type 2 diabetes."
+        ],
+        "missing_or_conflicting_evidence": [
+          "No HbA1c result available."
+        ],
+        "knowledge_refs": [
+          "KB-007"
+        ]
+      },
+      {
+        "condition": "Community-acquired pneumonia",
+        "category": "respiratory",
+        "consideration_level": "lower",
+        "supporting_evidence": [
+          "Chest pain that worsens with breathing is a feature of pneumonia.",
+          "Shortness of breath is a common symptom of pneumonia."
+        ],
+        "missing_or_conflicting_evidence": [
+          "No fever, cough, or abnormal white cell count reported."
+        ],
+        "knowledge_refs": [
+          "KB-001"
+        ]
+      },
+      {
+        "condition": "Dengue fever",
+        "category": "infectious disease",
+        "consideration_level": "lower",
+        "supporting_evidence": [
+          "The patient's location (India) is a risk factor for dengue fever."
+        ],
+        "missing_or_conflicting_evidence": [
+          "No fever, headache, rash, or platelet count reported."
+        ],
+        "knowledge_refs": [
+          "KB-004"
+        ]
+      }
+    ],
+    "reasoning_summary": "Given the patient's symptoms of chest pain and shortness of breath, along with a recent onset and associated sweating, acute coronary syndrome is a primary consideration due to the red-flag presentation. The elevated fasting glucose also raises concern for type 2 diabetes. Pneumonia and dengue fever are less likely given the current information, but remain possibilities that should be considered. Further investigation is warranted.",
+    "disclaimer": "This differential diagnosis is based solely on the provided information and is intended for educational purposes only. It does not constitute medical advice and should not be used to replace the judgment of a qualified healthcare professional."
+  },
+  "PLAN-SIM-005": {
+    "steps": [
+      {
+        "step": "ECG",
+        "rationale": "Given the patient\u2019s chest pain and shortness of breath, and the higher consideration level for Acute Coronary Syndrome, an ECG is warranted to assess for ST-segment changes or other signs of ischemia. This is a standard initial step in evaluating chest pain.",
+        "related_candidates": [
+          "Acute coronary syndrome",
+          "Community-acquired pneumonia"
+        ],
+        "priority": "prompt clinician review"
+      },
+      {
+        "step": "Cardiac Troponin Testing",
+        "rationale": "Following an ECG, cardiac troponin levels should be measured. Elevated troponins would strongly support the diagnosis of Acute Coronary Syndrome.",
+        "related_candidates": [
+          "Acute coronary syndrome"
+        ],
+        "priority": "early"
+      },
+      {
+        "step": "Repeat Fasting Glucose",
+        "rationale": "The elevated fasting glucose warrants confirmation. Repeating the test will help assess the degree of hyperglycemia and guide further investigation related to Type 2 Diabetes Mellitus.",
+        "related_candidates": [
+          "Type 2 diabetes mellitus"
+        ],
+        "priority": "early"
+      },
+      {
+        "step": "Chest X-ray",
+        "rationale": "To evaluate for potential alternative diagnoses such as community-acquired pneumonia, a chest X-ray could be considered, particularly given the patient\u2019s symptoms and smoking history.",
+        "related_candidates": [
+          "Community-acquired pneumonia"
+        ],
+        "priority": "routine"
+      },
+      {
+        "step": "Assess Vital Signs and Oxygen Saturation",
+        "rationale": "A thorough assessment of vital signs, including oxygen saturation, is crucial in this presentation of chest pain and shortness of breath. This provides immediate information about the severity of the patient\u2019s condition.",
+        "related_candidates": [
+          "Acute coronary syndrome",
+          "Community-acquired pneumonia"
+        ],
+        "priority": "early"
+      },
+      {
+        "step": "Review Medication List",
+        "rationale": "The patient\u2019s history of hypertension and glucose-lowering medication is relevant. Confirming the current medications and dosages is important for a complete clinical picture.",
+        "related_candidates": [
+          "Type 2 diabetes mellitus",
+          "Acute coronary syndrome"
+        ],
+        "priority": "routine"
+      }
+    ],
+    "summary": "Based on the patient\u2019s presentation and initial lab results, immediate assessment of cardiac function and consideration of alternative diagnoses such as pneumonia are warranted. Further investigation will help determine the underlying cause of the patient\u2019s symptoms.",
+    "disclaimer": "This diagnostic plan is based on the provided case context and educational knowledge. It is intended for educational purposes only and should not be considered a substitute for clinical judgment."
+  }
+}

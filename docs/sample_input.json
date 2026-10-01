@@ -1,0 +1,23 @@
+{
+  "patient_id": "SIM-001",
+  "description": "Respiratory presentation with raised inflammatory markers",
+  "age": 45,
+  "sex": "Male",
+  "symptoms": [
+    "fever",
+    "cough",
+    "fatigue"
+  ],
+  "symptom_duration": "5 days",
+  "medical_history": [
+    "hypertension"
+  ],
+  "medications": [
+    "antihypertensive medication"
+  ],
+  "allergies": [],
+  "lab_results": {
+    "WBC": 13500,
+    "CRP": 48
+  }
+}

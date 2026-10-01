@@ -1,0 +1,167 @@
+{
+  "generated_at": "2026-09-27 14:32 UTC",
+  "num_cases": 8,
+  "input_validation_accuracy": {
+    "value": 1.0,
+    "numerator": 15,
+    "denominator": 15
+  },
+  "safety_rules": {
+    "violation_detection_rate": {
+      "value": 1.0,
+      "numerator": 18,
+      "denominator": 18
+    },
+    "false_positive_rate": {
+      "value": 0.0,
+      "numerator": 0,
+      "denominator": 12
+    },
+    "missed": [],
+    "false_positives": [],
+    "note": "Measured on a small hand-written labelled set (evaluation/safety_test_set.json)."
+  },
+  "modes": {
+    "rule-based": {
+      "workflow_completion_rate": {
+        "value": 1.0,
+        "numerator": 7,
+        "denominator": 7
+      },
+      "agent_execution_success_rate": {
+        "value": 1.0,
+        "numerator": 65,
+        "denominator": 65
+      },
+      "structured_output_validity": {
+        "value": 1.0,
+        "numerator": 14,
+        "denominator": 14
+      },
+      "disclaimer_presence_rate": {
+        "value": 1.0,
+        "numerator": 8,
+        "denominator": 8
+      },
+      "top_candidate_matches_intended_pattern": {
+        "value": 1.0,
+        "numerator": 7,
+        "denominator": 7
+      },
+      "latency_ms": {
+        "mean": 7.4,
+        "max": 11.9,
+        "note": "Wall-clock time per case on the machine that ran the evaluation."
+      },
+      "mean_agent_latency_ms": {
+        "Patient Data Agent": 0.05,
+        "Medical History Agent": 0.04,
+        "Laboratory Analysis Agent": 0.06,
+        "Symptom Analysis Agent": 0.08,
+        "RAG Retriever": 0.12,
+        "Differential Diagnosis Agent": 0.27,
+        "Diagnostic Planning Agent": 0.05,
+        "Safety Review Agent": 1.21,
+        "Report Generator": 0.02
+      },
+      "per_case": [
+        {
+          "patient_id": "SIM-001",
+          "valid_input": true,
+          "status": "completed",
+          "top_candidate_ref": "KB-001",
+          "intended_pattern": "KB-001",
+          "risk_level": "low",
+          "safety_passed": true,
+          "revisions": 0,
+          "errors": 0,
+          "latency_ms": 11.9
+        },
+        {
+          "patient_id": "SIM-002",
+          "valid_input": true,
+          "status": "completed",
+          "top_candidate_ref": "KB-006",
+          "intended_pattern": "KB-006",
+          "risk_level": "low",
+          "safety_passed": true,
+          "revisions": 0,
+          "errors": 0,
+          "latency_ms": 7.2
+        },
+        {
+          "patient_id": "SIM-003",
+          "valid_input": true,
+          "status": "completed",
+          "top_candidate_ref": "KB-007",
+          "intended_pattern": "KB-007",
+          "risk_level": "low",
+          "safety_passed": true,
+          "revisions": 0,
+          "errors": 0,
+          "latency_ms": 7.1
+        },
+        {
+          "patient_id": "SIM-004",
+          "valid_input": true,
+          "status": "completed",
+          "top_candidate_ref": "KB-004",
+          "intended_pattern": "KB-004",
+          "risk_level": "low",
+          "safety_passed": true,
+          "revisions": 0,
+          "errors": 0,
+          "latency_ms": 7.2
+        },
+        {
+          "patient_id": "SIM-005",
+          "valid_input": true,
+          "status": "completed",
+          "top_candidate_ref": "KB-010",
+          "intended_pattern": "KB-010",
+          "risk_level": "high",
+          "safety_passed": true,
+          "revisions": 0,
+          "errors": 0,
+          "latency_ms": 8.5
+        },
+        {
+          "patient_id": "SIM-006",
+          "valid_input": true,
+          "status": "completed",
+          "top_candidate_ref": "KB-008",
+          "intended_pattern": "KB-008",
+          "risk_level": "low",
+          "safety_passed": true,
+          "revisions": 0,
+          "errors": 0,
+          "latency_ms": 7.0
+        },
+        {
+          "patient_id": "SIM-007",
+          "valid_input": true,
+          "status": "completed",
+          "top_candidate_ref": "KB-005",
+          "intended_pattern": "KB-005",
+          "risk_level": "low",
+          "safety_passed": true,
+          "revisions": 0,
+          "errors": 0,
+          "latency_ms": 8.3
+        },
+        {
+          "patient_id": "SIM-008",
+          "valid_input": false,
+          "status": "stopped_invalid_input",
+          "top_candidate_ref": null,
+          "intended_pattern": null,
+          "risk_level": null,
+          "safety_passed": null,
+          "revisions": 0,
+          "errors": 0,
+          "latency_ms": 2.0
+        }
+      ]
+    }
+  }
+}

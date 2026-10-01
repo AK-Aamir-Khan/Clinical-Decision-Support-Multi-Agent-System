@@ -1,0 +1,349 @@
+{
+  "final_report": {
+    "status": "completed",
+    "disclaimer": "Educational simulation only. This system does not provide medical diagnosis, treatment, or professional medical advice.",
+    "patient_id": "SIM-001",
+    "patient_summary": "45-year-old male (synthetic case)",
+    "llm_mode": "rule-based",
+    "symptom_summary": "The patient reports 3 symptom(s): fever, cough, fatigue. The reported symptom duration is 5 days.",
+    "red_flags": [],
+    "history_summary": "1 past condition(s), 1 medication(s) and 0 allergy record(s) reviewed.",
+    "lab_summary": "2 lab value(s) reviewed: 2 outside the reference range, 0 invalid, 0 without a reference range.",
+    "abnormal_labs": [
+      "WBC high (13500 cells/uL)",
+      "CRP high (48 mg/L)"
+    ],
+    "knowledge_used": [
+      "KB-001: Community-acquired pneumonia",
+      "KB-012: Interpreting inflammatory markers (WBC and CRP)",
+      "KB-005: Urinary tract infection",
+      "KB-003: Influenza-like illness"
+    ],
+    "differential_diagnosis": [
+      {
+        "condition": "Community-acquired pneumonia",
+        "category": "respiratory infection",
+        "consideration_level": "higher",
+        "supporting_evidence": [
+          "Reported symptom: cough",
+          "Reported symptom: fatigue",
+          "Reported symptom: fever",
+          "Lab finding: WBC high",
+          "Lab finding: CRP high"
+        ],
+        "missing_or_conflicting_evidence": [],
+        "knowledge_refs": [
+          "KB-001"
+        ]
+      },
+      {
+        "condition": "Urinary tract infection",
+        "category": "genitourinary infection",
+        "consideration_level": "moderate",
+        "supporting_evidence": [
+          "Reported symptom: fever",
+          "Lab finding: WBC high",
+          "Lab finding: CRP high"
+        ],
+        "missing_or_conflicting_evidence": [],
+        "knowledge_refs": [
+          "KB-005"
+        ]
+      },
+      {
+        "condition": "Influenza-like illness",
+        "category": "respiratory infection",
+        "consideration_level": "moderate",
+        "supporting_evidence": [
+          "Reported symptom: cough",
+          "Reported symptom: fatigue",
+          "Reported symptom: fever"
+        ],
+        "missing_or_conflicting_evidence": [],
+        "knowledge_refs": [
+          "KB-003"
+        ]
+      }
+    ],
+    "diagnostic_plan": [
+      {
+        "step": "Chest X-ray is commonly used to look for lung consolidation.",
+        "rationale": "Educational reference material lists this when evaluating community-acquired pneumonia.",
+        "related_candidates": [
+          "Community-acquired pneumonia"
+        ],
+        "priority": "early"
+      },
+      {
+        "step": "Pulse oximetry is used to assess oxygenation.",
+        "rationale": "Educational reference material lists this when evaluating community-acquired pneumonia.",
+        "related_candidates": [
+          "Community-acquired pneumonia"
+        ],
+        "priority": "early"
+      },
+      {
+        "step": "Sputum or blood cultures may be considered in some settings.",
+        "rationale": "Educational reference material lists this when evaluating community-acquired pneumonia.",
+        "related_candidates": [
+          "Community-acquired pneumonia"
+        ],
+        "priority": "early"
+      },
+      {
+        "step": "Urinalysis (dipstick and/or microscopy) is commonly used.",
+        "rationale": "Educational reference material lists this when evaluating urinary tract infection.",
+        "related_candidates": [
+          "Urinary tract infection"
+        ],
+        "priority": "routine"
+      },
+      {
+        "step": "Urine culture helps identify the organism in many settings.",
+        "rationale": "Educational reference material lists this when evaluating urinary tract infection.",
+        "related_candidates": [
+          "Urinary tract infection"
+        ],
+        "priority": "routine"
+      },
+      {
+        "step": "Rapid influenza or respiratory viral testing may be considered depending on setting and season.",
+        "rationale": "Educational reference material lists this when evaluating influenza-like illness.",
+        "related_candidates": [
+          "Influenza-like illness"
+        ],
+        "priority": "routine"
+      }
+    ],
+    "safety": {
+      "passed": true,
+      "risk_level": "low",
+      "requires_human_review": false,
+      "issue_count": 0,
+      "revisions": 0
+    },
+    "errors": [],
+    "markdown": "> **Educational simulation only. This system does not provide medical diagnosis, treatment, or professional medical advice.**\n\n# Educational Case Report - SIM-001\n\n**Patient:** 45-year-old male (synthetic case)  \n**Reasoning mode:** rule-based  \n**Safety risk level:** low\n\n## Findings\n- Symptoms: The patient reports 3 symptom(s): fever, cough, fatigue. The reported symptom duration is 5 days.\n- Warning symptoms: none identified\n- History: 1 past condition(s), 1 medication(s) and 0 allergy record(s) reviewed.\n- Labs: 2 lab value(s) reviewed: 2 outside the reference range, 0 invalid, 0 without a reference range.\n- Out-of-range labs (reference comparison only): WBC high (13500 cells/uL), CRP high (48 mg/L)\n\n## Conditions to consider (not a diagnosis)\n- **Community-acquired pneumonia** (higher consideration): Reported symptom: cough; Reported symptom: fatigue; Reported symptom: fever; Lab finding: WBC high; Lab finding: CRP high\n- **Urinary tract infection** (moderate consideration): Reported symptom: fever; Lab finding: WBC high; Lab finding: CRP high\n- **Influenza-like illness** (moderate consideration): Reported symptom: cough; Reported symptom: fatigue; Reported symptom: fever\n\n## Diagnostic steps that could be considered\n- [early] Chest X-ray is commonly used to look for lung consolidation. - Educational reference material lists this when evaluating community-acquired pneumonia.\n- [early] Pulse oximetry is used to assess oxygenation. - Educational reference material lists this when evaluating community-acquired pneumonia.\n- [early] Sputum or blood cultures may be considered in some settings. - Educational reference material lists this when evaluating community-acquired pneumonia.\n- [routine] Urinalysis (dipstick and/or microscopy) is commonly used. - Educational reference material lists this when evaluating urinary tract infection.\n- [routine] Urine culture helps identify the organism in many settings. - Educational reference material lists this when evaluating urinary tract infection.\n- [routine] Rapid influenza or respiratory viral testing may be considered depending on setting and season. - Educational reference material lists this when evaluating influenza-like illness.\n\n## Educational knowledge used\n- KB-001: Community-acquired pneumonia\n- KB-012: Interpreting inflammatory markers (WBC and CRP)\n- KB-005: Urinary tract infection\n- KB-003: Influenza-like illness"
+  },
+  "agent_trace": [
+    {
+      "agent": "Patient Data Agent",
+      "status": "ok",
+      "reads": [
+        "patient_input"
+      ],
+      "writes": [
+        "patient",
+        "validation"
+      ],
+      "message": "Patient record valid; structured case shared with analysis agents.",
+      "duration_ms": 0.1
+    },
+    {
+      "agent": "Medical History Agent",
+      "status": "ok",
+      "reads": [
+        "patient"
+      ],
+      "writes": [
+        "history_analysis"
+      ],
+      "message": "1 past condition(s), 1 medication(s) and 0 allergy record(s) reviewed.",
+      "duration_ms": 0.05
+    },
+    {
+      "agent": "Laboratory Analysis Agent",
+      "status": "ok",
+      "reads": [
+        "patient"
+      ],
+      "writes": [
+        "lab_analysis"
+      ],
+      "message": "2 lab value(s) reviewed: 2 outside the reference range, 0 invalid, 0 without a reference range.",
+      "duration_ms": 0.06
+    },
+    {
+      "agent": "Symptom Analysis Agent",
+      "status": "ok",
+      "reads": [
+        "patient"
+      ],
+      "writes": [
+        "symptom_analysis"
+      ],
+      "message": "3 symptom(s), systems: constitutional, respiratory.",
+      "duration_ms": 0.25
+    },
+    {
+      "agent": "RAG Retriever",
+      "status": "ok",
+      "reads": [
+        "symptom_analysis",
+        "history_analysis",
+        "lab_analysis"
+      ],
+      "writes": [
+        "retrieval_query",
+        "retrieved_knowledge"
+      ],
+      "message": "Retrieved 4 document(s): KB-001, KB-012, KB-005, KB-003",
+      "duration_ms": 0.15
+    },
+    {
+      "agent": "Differential Diagnosis Agent",
+      "status": "ok",
+      "reads": [
+        "symptom_analysis",
+        "history_analysis",
+        "lab_analysis",
+        "retrieved_knowledge",
+        "safety_feedback"
+      ],
+      "writes": [
+        "differential_diagnosis"
+      ],
+      "message": "3 candidate(s) via rule-based reasoning.",
+      "duration_ms": 0.24
+    },
+    {
+      "agent": "Diagnostic Planning Agent",
+      "status": "ok",
+      "reads": [
+        "symptom_analysis",
+        "history_analysis",
+        "lab_analysis",
+        "differential_diagnosis",
+        "safety_feedback"
+      ],
+      "writes": [
+        "diagnostic_plan"
+      ],
+      "message": "6 diagnostic step(s) via rule-based reasoning.",
+      "duration_ms": 0.09
+    },
+    {
+      "agent": "Safety Review Agent",
+      "status": "ok",
+      "reads": [
+        "differential_diagnosis",
+        "diagnostic_plan",
+        "symptom_analysis"
+      ],
+      "writes": [
+        "safety_review",
+        "safety_feedback",
+        "revision_count"
+      ],
+      "message": "Risk low; passed.",
+      "duration_ms": 1.91
+    },
+    {
+      "agent": "Report Generator",
+      "status": "ok",
+      "reads": [
+        "*"
+      ],
+      "writes": [
+        "final_report"
+      ],
+      "message": "Report status: completed.",
+      "duration_ms": 0.03
+    }
+  ],
+  "safety_review": {
+    "passed": true,
+    "risk_level": "low",
+    "requires_human_review": false,
+    "issues": [],
+    "notes": [
+      "No safety rule violations detected."
+    ],
+    "feedback": [],
+    "action": "finalize"
+  },
+  "retrieved_knowledge": [
+    {
+      "id": "KB-001",
+      "title": "Community-acquired pneumonia",
+      "category": "respiratory infection",
+      "score": 0.5518,
+      "matched_terms": [
+        "cough",
+        "crp",
+        "fatigue",
+        "fever",
+        "high",
+        "wbc"
+      ],
+      "matched_lab_signals": [
+        "WBC high",
+        "CRP high"
+      ],
+      "content": "Pneumonia is an infection of the lung tissue. Commonly described features include fever, cough (sometimes with sputum), breathlessness and chest pain that worsens with breathing. A raised white cell count and CRP are non-specific inflammatory markers that can accompany bacterial infection.",
+      "general_workup": [
+        "Chest X-ray is commonly used to look for lung consolidation.",
+        "Pulse oximetry is used to assess oxygenation.",
+        "Sputum or blood cultures may be considered in some settings."
+      ]
+    },
+    {
+      "id": "KB-012",
+      "title": "Interpreting inflammatory markers (WBC and CRP)",
+      "category": "laboratory interpretation",
+      "score": 0.5371,
+      "matched_terms": [
+        "crp",
+        "fever",
+        "high",
+        "wbc"
+      ],
+      "matched_lab_signals": [
+        "WBC high",
+        "CRP high"
+      ],
+      "content": "White cell count and CRP are non-specific markers. They can rise with bacterial infection, other inflammation or tissue injury, and may be normal early in illness. They support, but never establish, a diagnosis and are interpreted with clinical findings and trends over time.",
+      "general_workup": [
+        "Interpret together with clinical findings.",
+        "Repeat measurement can show the trend over time."
+      ]
+    },
+    {
+      "id": "KB-005",
+      "title": "Urinary tract infection",
+      "category": "genitourinary infection",
+      "score": 0.3794,
+      "matched_terms": [
+        "crp",
+        "fever",
+        "high",
+        "wbc"
+      ],
+      "matched_lab_signals": [
+        "WBC high",
+        "CRP high"
+      ],
+      "content": "Urinary tract infections commonly cause burning on urination, increased frequency and urgency, and lower abdominal discomfort. Fever and flank pain can suggest the infection has involved the kidneys.",
+      "general_workup": [
+        "Urinalysis (dipstick and/or microscopy) is commonly used.",
+        "Urine culture helps identify the organism in many settings."
+      ]
+    },
+    {
+      "id": "KB-003",
+      "title": "Influenza-like illness",
+      "category": "respiratory infection",
+      "score": 0.1699,
+      "matched_terms": [
+        "cough",
+        "fatigue",
+        "fever"
+      ],
+      "matched_lab_signals": [],
+      "content": "Influenza commonly presents with abrupt fever, muscle aches, headache, fatigue and dry cough. Many other viral infections cause a similar picture, so the term influenza-like illness is used when the cause is not confirmed.",
+      "general_workup": [
+        "Rapid influenza or respiratory viral testing may be considered depending on setting and season."
+      ]
+    }
+  ]
+}

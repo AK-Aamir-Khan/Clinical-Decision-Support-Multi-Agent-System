@@ -1,0 +1,93 @@
+[
+  {
+    "patient_id": "SIM-001",
+    "description": "Respiratory presentation with raised inflammatory markers",
+    "age": 45,
+    "sex": "Male",
+    "symptoms": ["fever", "cough", "fatigue"],
+    "symptom_duration": "5 days",
+    "medical_history": ["hypertension"],
+    "medications": ["antihypertensive medication"],
+    "allergies": [],
+    "lab_results": {"WBC": 13500, "CRP": 48}
+  },
+  {
+    "patient_id": "SIM-002",
+    "description": "Fatigue and pallor with low hemoglobin indices",
+    "age": 29,
+    "sex": "Female",
+    "symptoms": ["fatigue", "dizziness", "pallor", "breathlessness on exertion"],
+    "symptom_duration": "2 months",
+    "medical_history": ["heavy menstrual bleeding"],
+    "medications": [],
+    "allergies": [],
+    "lab_results": {"Hemoglobin": 9.8, "MCV": 72, "Ferritin": 8, "WBC": 6800}
+  },
+  {
+    "patient_id": "SIM-003",
+    "description": "Thirst and frequent urination with raised glucose",
+    "age": 52,
+    "sex": "Male",
+    "symptoms": ["increased thirst", "frequent urination", "fatigue", "blurred vision"],
+    "symptom_duration": "6 weeks",
+    "medical_history": ["hypertension"],
+    "medications": ["amlodipine"],
+    "allergies": [],
+    "lab_results": {"Glucose_fasting": 168, "HbA1c": 8.1, "Creatinine": 1.0}
+  },
+  {
+    "patient_id": "SIM-004",
+    "description": "Acute fever with rash and low platelets",
+    "age": 34,
+    "sex": "Female",
+    "symptoms": ["high fever", "headache", "pain behind eyes", "joint pain", "rash"],
+    "symptom_duration": "3 days",
+    "medical_history": [],
+    "medications": [],
+    "allergies": [],
+    "lab_results": {"Platelets": 85000, "WBC": 3200, "Hemoglobin": 13.1}
+  },
+  {
+    "patient_id": "SIM-005",
+    "description": "Chest pain with cardiovascular risk factors (red-flag demo)",
+    "age": 61,
+    "sex": "Male",
+    "symptoms": ["chest pain", "shortness of breath", "sweating"],
+    "symptom_duration": "2 hours",
+    "medical_history": ["hypertension", "type 2 diabetes", "smoker"],
+    "medications": ["metformin", "telmisartan"],
+    "allergies": ["penicillin"],
+    "lab_results": {"Glucose_fasting": 142, "Creatinine": 1.2}
+  },
+  {
+    "patient_id": "SIM-006",
+    "description": "Tiredness, weight gain and cold intolerance with raised TSH",
+    "age": 47,
+    "sex": "Female",
+    "symptoms": ["fatigue", "weight gain", "cold intolerance", "constipation"],
+    "symptom_duration": "4 months",
+    "medical_history": [],
+    "medications": [],
+    "allergies": [],
+    "lab_results": {"TSH": 9.2, "Hemoglobin": 12.4}
+  },
+  {
+    "patient_id": "SIM-007",
+    "description": "Urinary symptoms with one invalid lab entry (error-handling demo)",
+    "age": 26,
+    "sex": "Female",
+    "symptoms": ["burning urination", "frequent urination", "lower abdominal pain"],
+    "symptom_duration": "2 days",
+    "medical_history": [],
+    "medications": [],
+    "allergies": ["sulfa drugs"],
+    "lab_results": {"WBC": 11800, "CRP": -4}
+  },
+  {
+    "patient_id": "SIM-008",
+    "description": "Incomplete record: missing sex and impossible age (validation demo)",
+    "age": 130,
+    "symptoms": ["cough"],
+    "symptom_duration": "1 week"
+  }
+]

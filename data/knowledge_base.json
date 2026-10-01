@@ -1,0 +1,126 @@
+{
+  "_meta": {
+    "title": "MedAgent-CDSS Educational Knowledge Base",
+    "description": "Short, general, textbook-level educational summaries written for this student project. NOT clinical guidance, NOT personalised medical advice, and not a substitute for authoritative references.",
+    "version": "1.0"
+  },
+  "documents": [
+    {
+      "id": "KB-001",
+      "title": "Community-acquired pneumonia",
+      "category": "respiratory infection",
+      "keywords": ["fever", "cough", "sputum", "shortness of breath", "breathlessness", "chest pain", "fatigue", "chills"],
+      "lab_signals": [{"test": "WBC", "status": "high"}, {"test": "CRP", "status": "high"}],
+      "content": "Pneumonia is an infection of the lung tissue. Commonly described features include fever, cough (sometimes with sputum), breathlessness and chest pain that worsens with breathing. A raised white cell count and CRP are non-specific inflammatory markers that can accompany bacterial infection.",
+      "general_workup": ["Chest X-ray is commonly used to look for lung consolidation.", "Pulse oximetry is used to assess oxygenation.", "Sputum or blood cultures may be considered in some settings."]
+    },
+    {
+      "id": "KB-002",
+      "title": "Viral upper respiratory tract infection (common cold)",
+      "category": "respiratory infection",
+      "keywords": ["runny nose", "sore throat", "cough", "sneezing", "mild fever", "body ache", "congestion"],
+      "lab_signals": [],
+      "content": "Viral upper respiratory infections typically cause runny nose, sore throat, sneezing and cough, sometimes with mild fever. They are usually self-limiting. Inflammatory markers are often normal or only mildly raised.",
+      "general_workup": ["Often assessed clinically without routine tests.", "Reassessment is usually considered if symptoms persist beyond the expected course or worsen."]
+    },
+    {
+      "id": "KB-003",
+      "title": "Influenza-like illness",
+      "category": "respiratory infection",
+      "keywords": ["fever", "body ache", "muscle pain", "headache", "cough", "fatigue", "chills", "sore throat"],
+      "lab_signals": [],
+      "content": "Influenza commonly presents with abrupt fever, muscle aches, headache, fatigue and dry cough. Many other viral infections cause a similar picture, so the term influenza-like illness is used when the cause is not confirmed.",
+      "general_workup": ["Rapid influenza or respiratory viral testing may be considered depending on setting and season."]
+    },
+    {
+      "id": "KB-004",
+      "title": "Dengue fever",
+      "category": "vector-borne infection",
+      "keywords": ["fever", "high fever", "headache", "pain behind eyes", "joint pain", "muscle pain", "body ache", "rash", "bleeding gums", "vomiting"],
+      "lab_signals": [{"test": "Platelets", "status": "low"}, {"test": "WBC", "status": "low"}],
+      "content": "Dengue is a mosquito-borne viral infection common in tropical and subtropical regions, including India. Typical features include high fever, severe headache, pain behind the eyes, muscle and joint pain and rash. A low platelet count and low white cell count are commonly described laboratory findings. Warning signs such as bleeding, persistent vomiting or severe abdominal pain require urgent clinical attention.",
+      "general_workup": ["NS1 antigen testing and dengue serology (IgM/IgG) are commonly used tests.", "Serial platelet count and hematocrit are commonly monitored."]
+    },
+    {
+      "id": "KB-005",
+      "title": "Urinary tract infection",
+      "category": "genitourinary infection",
+      "keywords": ["burning urination", "dysuria", "frequent urination", "urgency", "lower abdominal pain", "fever", "cloudy urine"],
+      "lab_signals": [{"test": "WBC", "status": "high"}, {"test": "CRP", "status": "high"}],
+      "content": "Urinary tract infections commonly cause burning on urination, increased frequency and urgency, and lower abdominal discomfort. Fever and flank pain can suggest the infection has involved the kidneys.",
+      "general_workup": ["Urinalysis (dipstick and/or microscopy) is commonly used.", "Urine culture helps identify the organism in many settings."]
+    },
+    {
+      "id": "KB-006",
+      "title": "Iron deficiency anemia",
+      "category": "hematologic",
+      "keywords": ["fatigue", "tiredness", "pallor", "breathlessness on exertion", "dizziness", "weakness", "heavy menstrual bleeding"],
+      "lab_signals": [{"test": "Hemoglobin", "status": "low"}, {"test": "MCV", "status": "low"}, {"test": "Ferritin", "status": "low"}],
+      "content": "Anemia means a reduced hemoglobin concentration. Iron deficiency is a common cause and typically produces small red cells (low MCV) and low ferritin. Symptoms include tiredness, pallor and breathlessness on exertion. Blood loss, such as heavy menstrual bleeding, and low dietary intake are common contributors.",
+      "general_workup": ["Complete blood count with red cell indices.", "Iron studies (ferritin, serum iron, transferrin saturation).", "Clinicians often look for a source of blood loss where appropriate."]
+    },
+    {
+      "id": "KB-007",
+      "title": "Type 2 diabetes mellitus and hyperglycemia",
+      "category": "metabolic/endocrine",
+      "keywords": ["increased thirst", "thirst", "frequent urination", "fatigue", "weight loss", "blurred vision", "diabetes"],
+      "lab_signals": [{"test": "Glucose_fasting", "status": "high"}, {"test": "HbA1c", "status": "high"}],
+      "content": "Type 2 diabetes is characterised by raised blood glucose. Classic symptoms include increased thirst, frequent urination, tiredness and blurred vision, although many people have no symptoms. Fasting glucose and HbA1c are commonly used to assess glycemia.",
+      "general_workup": ["Repeat fasting glucose or HbA1c is commonly used to confirm raised values.", "Kidney function and urine albumin testing.", "Lipid profile."]
+    },
+    {
+      "id": "KB-008",
+      "title": "Hypothyroidism",
+      "category": "endocrine",
+      "keywords": ["fatigue", "weight gain", "cold intolerance", "constipation", "dry skin", "hair loss", "low mood"],
+      "lab_signals": [{"test": "TSH", "status": "high"}],
+      "content": "Hypothyroidism is reduced thyroid hormone production. Features include tiredness, weight gain, feeling cold, constipation and dry skin. In primary hypothyroidism TSH is typically raised.",
+      "general_workup": ["Free T4 measurement alongside TSH.", "Repeat thyroid function testing to confirm an abnormal result."]
+    },
+    {
+      "id": "KB-009",
+      "title": "Acute gastroenteritis and dehydration",
+      "category": "gastrointestinal",
+      "keywords": ["diarrhea", "diarrhoea", "vomiting", "nausea", "abdominal pain", "fever", "dizziness", "reduced urine"],
+      "lab_signals": [{"test": "Sodium", "status": "low"}, {"test": "Potassium", "status": "low"}, {"test": "Creatinine", "status": "high"}],
+      "content": "Gastroenteritis causes diarrhea and/or vomiting, often with abdominal cramps and sometimes fever. Fluid loss can lead to dehydration, electrolyte disturbances (such as low potassium or abnormal sodium) and a rise in creatinine.",
+      "general_workup": ["Clinical assessment of hydration status.", "Electrolytes and kidney function tests.", "Stool testing may be considered in selected cases."]
+    },
+    {
+      "id": "KB-010",
+      "title": "Acute coronary syndrome (warning presentation)",
+      "category": "cardiovascular",
+      "keywords": ["chest pain", "chest tightness", "shortness of breath", "sweating", "nausea", "pain radiating to arm", "hypertension", "diabetes", "smoking", "coronary"],
+      "lab_signals": [],
+      "content": "Acute coronary syndrome describes reduced blood flow to the heart muscle. Chest pain or pressure, breathlessness, sweating and nausea are typical features. Hypertension, diabetes and smoking are recognised risk factors. Chest pain is a warning feature that requires urgent clinical evaluation in real settings.",
+      "general_workup": ["An ECG is typically obtained promptly for chest pain.", "Cardiac troponin testing is commonly used.", "Urgent in-person clinical evaluation is expected for suspected cardiac chest pain."]
+    },
+    {
+      "id": "KB-011",
+      "title": "Primary headache (e.g. migraine)",
+      "category": "neurological",
+      "keywords": ["headache", "nausea", "light sensitivity", "visual aura", "migraine"],
+      "lab_signals": [],
+      "content": "Migraine is a common primary headache disorder with recurrent headaches, often one-sided and throbbing, with nausea and sensitivity to light. Red-flag features such as a sudden severe headache, confusion, fever with stiff neck or new neurological deficits need urgent evaluation.",
+      "general_workup": ["Detailed headache history and neurological examination.", "Imaging is generally reserved for red-flag features or atypical patterns."]
+    },
+    {
+      "id": "KB-012",
+      "title": "Interpreting inflammatory markers (WBC and CRP)",
+      "category": "laboratory interpretation",
+      "keywords": ["inflammation", "infection", "fever"],
+      "lab_signals": [{"test": "WBC", "status": "high"}, {"test": "CRP", "status": "high"}, {"test": "WBC", "status": "low"}],
+      "content": "White cell count and CRP are non-specific markers. They can rise with bacterial infection, other inflammation or tissue injury, and may be normal early in illness. They support, but never establish, a diagnosis and are interpreted with clinical findings and trends over time.",
+      "general_workup": ["Interpret together with clinical findings.", "Repeat measurement can show the trend over time."]
+    },
+    {
+      "id": "KB-013",
+      "title": "Kidney function and raised creatinine",
+      "category": "renal",
+      "keywords": ["reduced urine", "swelling", "fatigue", "nausea", "chronic kidney disease"],
+      "lab_signals": [{"test": "Creatinine", "status": "high"}, {"test": "Potassium", "status": "high"}],
+      "content": "Creatinine is used to estimate kidney function. A raised value can reflect acute kidney injury (for example from dehydration) or chronic kidney disease. Comparing with previous results helps distinguish a new change from a long-standing one.",
+      "general_workup": ["Repeat creatinine and electrolytes to assess the trend.", "Urinalysis.", "Kidney ultrasound may be considered in selected cases."]
+    }
+  ]
+}
