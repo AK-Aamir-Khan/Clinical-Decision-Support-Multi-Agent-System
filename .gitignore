@@ -26,3 +26,7 @@ desktop.ini
 
 # Personal lab report (not for the public repo)
 docs/MedAgent-CDSS_Lab-I_Report*
+
+# One-click launcher runtime files
+.medagent_launcher.json
+logs/

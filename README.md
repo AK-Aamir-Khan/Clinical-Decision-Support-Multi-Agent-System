@@ -25,6 +25,7 @@ MedAgent-CDSS is a **LangGraph** multi-agent system. Specialised agents analyse 
 
 - [Highlights](#highlights)
 - [Quick start](#quick-start)
+- [Running MedAgent-CDSS with One Click](#running-medagent-cdss-with-one-click)
 - [How it works](#how-it-works)
 - [Agents](#agents)
 - [Running with Gemma 3 4B (Ollama)](#running-with-gemma-3-4b-ollama)
@@ -88,6 +89,36 @@ Without `.env`, the app runs in **rule-based mode**: every agent still works and
 | `python -m app.evaluation` | Metrics on all synthetic cases → `evaluation/results.md` |
 | `python -m app.evaluation --llm` | Also evaluate LLM mode (needs Ollama or an API key) |
 | `python scripts/generate_docs.py` | Regenerate diagrams and sample output in `docs/` |
+
+---
+
+## Running MedAgent-CDSS with One Click
+
+On **Windows**, after the one-time setup from [Quick start](#quick-start) (create `.venv`, `pip install -r requirements.txt`, `ollama pull gemma3:4b`, `.env` with the Ollama settings):
+
+1. **Double-click `start_medagent.bat`** in the project folder.
+2. **Ollama and Gemma are detected or started.** If Ollama is already running it is reused (no second server). If not, `ollama serve` is started in the background (log: `logs/ollama.log`). If `gemma3:4b` is missing, it is downloaded once.
+3. **The app starts** with the normal command, `streamlit run app/main.py`.
+4. **Your browser opens automatically** at **http://localhost:8501** once the app is ready.
+
+The window stays open and shows the app's log, so any error is visible. If something fails, the window says what went wrong and waits for a key press.
+
+**To stop:** press **Ctrl+C** in that window, or double-click **`stop_medagent.bat`**. It stops only what the launcher started: the app, and Ollama only if the launcher started it. Other Python or Ollama processes are left alone.
+
+**Other port:** `start_medagent.bat --port 8502`
+
+**Manual start (PowerShell / VS Code terminal)**, exactly as before:
+
+```powershell
+cd "path\to\the\project"
+.venv\Scripts\Activate.ps1      # Command Prompt: .venv\Scripts\activate
+ollama serve                    # only if Ollama is not already running (e.g. tray app)
+streamlit run app/main.py       # then open http://localhost:8501
+```
+
+> Note: `python app/main.py` does **not** start the web app. Streamlit apps must be started with `streamlit run`.
+
+The launcher logic lives in [`scripts/launcher.py`](scripts/launcher.py). It reads the Ollama URL and model from your `.env` (`OPENAI_BASE_URL`, `OPENAI_MODEL`), so nothing is hard-coded. It also works on Linux/macOS: `python scripts/launcher.py` (stop: `python scripts/launcher.py --stop`).
 
 ---
 
@@ -283,6 +314,8 @@ Clinical-Decision-Support-Multi-Agent-System/
 ├── docs/                        # diagrams, Mermaid graph, sample I/O, report notes
 ├── screenshots/                 # screenshots of the running app
 ├── scripts/generate_docs.py     # regenerates docs/ from the code
+├── scripts/launcher.py          # one-click launcher logic (Ollama check + app start/stop)
+├── start_medagent.bat, stop_medagent.bat   # Windows one-click start / stop
 ├── Dockerfile, requirements.txt, requirements-dev.txt
 └── .env.example, pytest.ini, LICENSE
 ```
